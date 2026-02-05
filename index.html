@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive Form Validation</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+        }
+
+        .container {
+            background: white;
+            width: 350px;
+            margin: 80px auto;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        input {
+            width: 95%;
+            padding: 8px;
+            margin-top: 5px;
+            font-size: 15px;
+        }
+
+        .error {
+            color: red;
+            font-size: 13px;
+            display: none;
+        }
+
+        .success {
+            color: green;
+            font-size: 14px;
+            display: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #3498db;
+            color: white;
+            border: none;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        input.valid {
+            border: 2px solid green;
+        }
+
+        input.invalid {
+            border: 2px solid red;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Registration Form</h2>
+
+    <form id="myForm" onsubmit="return validateForm()">
+
+        <!-- Username -->
+        <label>Username</label>
+        <input type="text" id="username">
+        <div class="error" id="userError">Username must be at least 3 characters</div>
+
+        <!-- Email -->
+        <label>Email</label>
+        <input type="text" id="email">
+        <div class="error" id="emailError">Enter a valid email address</div>
+
+        <!-- Password -->
+        <label>Password</label>
+        <input type="password" id="password">
+        <div class="error" id="passError">Password must be at least 6 characters</div>
+
+        <!-- Confirm Password -->
+        <label>Confirm Password</label>
+        <input type="password" id="confirmPassword">
+        <div class="error" id="confirmError">Passwords do not match</div>
+
+        <!-- Submit -->
+        <button type="submit">Register</button>
+
+        <div class="success" id="successMsg">Form Submitted Successfully!</div>
+
+    </form>
+
+</div>
+
+<script>
+
+let username = document.getElementById("username");
+let email = document.getElementById("email");
+let password = document.getElementById("password");
+let confirmPassword = document.getElementById("confirmPassword");
+
+// Real-time validation
+username.addEventListener("input", validateUsername);
+email.addEventListener("input", validateEmail);
+password.addEventListener("input", validatePassword);
+confirmPassword.addEventListener("input", validateConfirm);
+
+// Username validation
+function validateUsername() {
+    if (username.value.length < 3) {
+        showError(username, "userError");
+        return false;
+    }
+    showSuccess(username, "userError");
+    return true;
+}
+
+// Email validation
+function validateEmail() {
+    let pattern = /^[^ ]+@[^ ]+\\.[a-z]{2,3}$/;
+
+    if (!email.value.match(pattern)) {
+        showError(email, "emailError");
+        return false;
+    }
+    showSuccess(email, "emailError");
+    return true;
+}
+
+// Password validation
+function validatePassword() {
+    if (password.value.length < 6) {
+        showError(password, "passError");
+        return false;
+    }
+    showSuccess(password, "passError");
+    return true;
+}
+
+// Confirm password
+function validateConfirm() {
+    if (password.value !== confirmPassword.value || confirmPassword.value === "") {
+        showError(confirmPassword, "confirmError");
+        return false;
+    }
+    showSuccess(confirmPassword, "confirmError");
+    return true;
+}
+
+// Show error
+function showError(input, errorId) {
+    input.classList.add("invalid");
+    input.classList.remove("valid");
+    document.getElementById(errorId).style.display = "block
