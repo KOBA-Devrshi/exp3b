@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Interactive Form Validation</title>
+    <title>Form Validation with Console</title>
 
     <style>
         body {
@@ -19,15 +18,10 @@
             box-shadow: 0 0 10px gray;
         }
 
-        h2 {
-            text-align: center;
-        }
-
         input {
             width: 95%;
             padding: 8px;
-            margin-top: 5px;
-            font-size: 15px;
+            margin: 5px 0;
         }
 
         .error {
@@ -38,8 +32,15 @@
 
         .success {
             color: green;
-            font-size: 14px;
             display: none;
+        }
+
+        .valid {
+            border: 2px solid green;
+        }
+
+        .invalid {
+            border: 2px solid red;
         }
 
         button {
@@ -48,20 +49,8 @@
             background: #3498db;
             color: white;
             border: none;
-            margin-top: 15px;
+            margin-top: 10px;
             cursor: pointer;
-        }
-
-        button:hover {
-            background: #2980b9;
-        }
-
-        input.valid {
-            border: 2px solid green;
-        }
-
-        input.invalid {
-            border: 2px solid red;
         }
     </style>
 </head>
@@ -70,96 +59,170 @@
 
 <div class="container">
 
-    <h2>Registration Form</h2>
+<h2>Registration Form</h2>
 
-    <form id="myForm" onsubmit="return validateForm()">
+<form onsubmit="return validateForm()">
 
-        <!-- Username -->
-        <label>Username</label>
-        <input type="text" id="username">
-        <div class="error" id="userError">Username must be at least 3 characters</div>
+    <label>Username</label>
+    <input type="text" id="username">
+    <div class="error" id="userError">Min 3 characters</div>
 
-        <!-- Email -->
-        <label>Email</label>
-        <input type="text" id="email">
-        <div class="error" id="emailError">Enter a valid email address</div>
+    <label>Email</label>
+    <input type="text" id="email">
+    <div class="error" id="emailError">Invalid email</div>
 
-        <!-- Password -->
-        <label>Password</label>
-        <input type="password" id="password">
-        <div class="error" id="passError">Password must be at least 6 characters</div>
+    <label>Password</label>
+    <input type="password" id="password">
+    <div class="error" id="passError">Min 6 characters</div>
 
-        <!-- Confirm Password -->
-        <label>Confirm Password</label>
-        <input type="password" id="confirmPassword">
-        <div class="error" id="confirmError">Passwords do not match</div>
+    <label>Confirm Password</label>
+    <input type="password" id="confirmPassword">
+    <div class="error" id="confirmError">Passwords do not match</div>
 
-        <!-- Submit -->
-        <button type="submit">Register</button>
+    <button type="submit">Register</button>
 
-        <div class="success" id="successMsg">Form Submitted Successfully!</div>
+    <div class="success" id="successMsg">Form Submitted Successfully!</div>
 
-    </form>
+</form>
 
 </div>
 
 <script>
+
+console.log("Form validation script loaded");
 
 let username = document.getElementById("username");
 let email = document.getElementById("email");
 let password = document.getElementById("password");
 let confirmPassword = document.getElementById("confirmPassword");
 
-// Real-time validation
+/* Real-time events */
 username.addEventListener("input", validateUsername);
 email.addEventListener("input", validateEmail);
 password.addEventListener("input", validatePassword);
 confirmPassword.addEventListener("input", validateConfirm);
 
-// Username validation
+
+/* Username */
 function validateUsername() {
+
+    console.log("Checking username:", username.value);
+
     if (username.value.length < 3) {
+        console.log("Username invalid");
         showError(username, "userError");
         return false;
     }
+
+    console.log("Username valid");
     showSuccess(username, "userError");
     return true;
 }
 
-// Email validation
+
+/* Email */
 function validateEmail() {
-    let pattern = /^[^ ]+@[^ ]+\\.[a-z]{2,3}$/;
+
+    console.log("Checking email:", email.value);
+
+    let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
 
     if (!email.value.match(pattern)) {
+        console.log("Email invalid");
         showError(email, "emailError");
         return false;
     }
+
+    console.log("Email valid");
     showSuccess(email, "emailError");
     return true;
 }
 
-// Password validation
+
+/* Password */
 function validatePassword() {
+
+    console.log("Checking password");
+
     if (password.value.length < 6) {
+        console.log("Password too short");
         showError(password, "passError");
         return false;
     }
+
+    console.log("Password valid");
     showSuccess(password, "passError");
     return true;
 }
 
-// Confirm password
+
+/* Confirm Password */
 function validateConfirm() {
+
+    console.log("Checking confirm password");
+
     if (password.value !== confirmPassword.value || confirmPassword.value === "") {
+        console.log("Passwords do not match");
         showError(confirmPassword, "confirmError");
         return false;
     }
+
+    console.log("Passwords matched");
     showSuccess(confirmPassword, "confirmError");
     return true;
 }
 
-// Show error
+
+/* Error display */
 function showError(input, errorId) {
+
+    console.log("Showing error:", errorId);
+
     input.classList.add("invalid");
     input.classList.remove("valid");
-    document.getElementById(errorId).style.display = "block
+
+    document.getElementById(errorId).style.display = "block";
+}
+
+
+/* Success display */
+function showSuccess(input, errorId) {
+
+    console.log("Input correct:", input.id);
+
+    input.classList.add("valid");
+    input.classList.remove("invalid");
+
+    document.getElementById(errorId).style.display = "none";
+}
+
+
+/* Submit Validation */
+function validateForm() {
+
+    console.log("Submit button clicked");
+
+    let u = validateUsername();
+    let e = validateEmail();
+    let p = validatePassword();
+    let c = validateConfirm();
+
+    console.log("Final Result:", u, e, p, c);
+
+    if (u && e && p && c) {
+
+        console.log("Form submitted successfully");
+
+        document.getElementById("successMsg").style.display = "block";
+        return false; // Demo only
+    }
+
+    console.log("Form submission failed");
+
+    return false;
+}
+
+</script>
+
+</body>
+</html>
